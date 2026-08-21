@@ -1,4 +1,5 @@
 import { AuthProvider } from "@/context/AuthContext";
+import "./global.css";
 
 export const metadata = {
   title: "Event Platform",
