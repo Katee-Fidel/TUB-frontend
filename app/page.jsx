@@ -1,4 +1,5 @@
 import NavBar from "@/components/NavBar";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -28,6 +29,9 @@ export default function Home() {
               </button>
             </a>
           </div>
+          <Link href="/events" className="inline-block mt-5 text-muted text-sm hover:text-ivory transition">
+            Or Come Browse What's Live 
+          </Link>
         </section>
       </div>
     </main>

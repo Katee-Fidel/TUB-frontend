@@ -24,7 +24,7 @@ export default function EventDetailPage() {
         <NavBar />
 
         <div className="max-w-lg mx-auto py-10">
-          <Link href="/" className="text-muted text-sm hover:text-ivory transition">
+          <Link href="/events" className="text-muted text-sm hover:text-ivory transition">
             ← Back to discover
           </Link>
 
