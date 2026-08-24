@@ -13,6 +13,10 @@ export default function NavBar() {
       </Link>
 
       <div className="flex items-center gap-3">
+        <Link href="/events" className="text-muted text-sm font-semibold hover:text-ivory transition">
+          Discover
+        </Link>
+
         {user ? (
           <>
             <span className="text-muted text-sm hidden sm:inline">Hi, {user.name}</span>
