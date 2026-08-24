@@ -38,9 +38,9 @@ export default function DiscoverEventPage() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 pb-16">
                     {events.map((event) => (
-                        <link key={event._id} href={`/events/${event._id}`}>
+                        <Link key={event._id} href={`/events/${event._id}`}>
                             <EventCard event={event}/>
-                        </link>
+                        </Link>
                     ))}
                 </div>
             </div>
