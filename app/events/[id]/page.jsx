@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import NavBar from "@/components/NavBar";
+import TicketPurchase from "@/components/TicketPurchase";
 import { api } from "@/lib/api";
 
 export default function EventDetailPage() {
@@ -57,13 +58,9 @@ export default function EventDetailPage() {
                     <p className="font-mono text-xl font-bold">KES {event.ticketPrice}</p>
                     <p className="text-muted text-xs">{event.ticketsRemaining} tickets remaining</p>
                   </div>
-                  <button
-                    disabled
-                    className="bg-marigold/40 text-marigold-dark rounded-full px-6 py-3 font-extrabold cursor-not-allowed"
-                  >
-                    Buy ticket (Day 5)
-                  </button>
                 </div>
+                
+                <TicketPurchase event={event} />
               </div>
             </div>
           )}
