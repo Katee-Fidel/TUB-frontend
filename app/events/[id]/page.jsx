@@ -58,13 +58,9 @@ export default function EventDetailPage() {
                     <p className="font-mono text-xl font-bold">KES {event.ticketPrice}</p>
                     <p className="text-muted text-xs">{event.ticketsRemaining} tickets remaining</p>
                   </div>
-                  <button
-                    disabled
-                    className="bg-marigold/40 text-marigold-dark rounded-full px-6 py-3 font-extrabold cursor-not-allowed"
-                  >
-                    <TicketPurchase event={event} />
-                  </button>
                 </div>
+                
+                <TicketPurchase event={event} />
               </div>
             </div>
           )}

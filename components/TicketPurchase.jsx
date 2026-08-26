@@ -25,6 +25,7 @@ export default function TicketPurchase({ event }) {
       try {
         const data = await api.getTicketStatus(ticketId);
         if (data.status === "paid") { setTicket(data.ticket); setStatus("done"); return; }
+        if (data.status === "cancelled") { setError("Payment was cancelled or failed."); setStatus("error"); return; }
         if (data.status === "failed") { setError("Payment failed or was cancelled."); setStatus("error"); return; }
       } catch (err) {
         setError(err.message); setStatus("error"); return;
