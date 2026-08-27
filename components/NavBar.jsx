@@ -16,9 +16,13 @@ export default function NavBar() {
         <Link href="/events" className="text-muted text-sm font-semibold hover:text-ivory transition">
           Discover
         </Link>
+        <Link href="/community" className="text-muted text-sm font-semibold hover:text-ivory transition">
+          Feed
+        </Link>
 
         {user ? (
           <>
+            <Link href="/profile" className="text-muted text-sm font-semibold hover:text-ivory transition">Profile</Link>
             <span className="text-muted text-sm hidden sm:inline">Hi, {user.name}</span>
             <button
               onClick={logout}
