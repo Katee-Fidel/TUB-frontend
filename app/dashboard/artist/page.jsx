@@ -43,11 +43,16 @@ export default function ArtistDashboard() {
 
           <div className="flex items-center justify-between mt-10 mb-6">
             <h1 className="font-display text-3xl uppercase tracking-wide">Your events</h1>
-            <Link href="/dashboard/artist/events/new">
-              <button className="bg-marigold text-marigold-dark rounded-full px-5 py-2.5 text-sm font-extrabold hover:opacity-90 transition">
-                + Create event
-              </button>
-            </Link>
+            <div className="flex items-center gap-3">
+              <Link href="/dashboard/artist/scan" className="border border-white/10 text-ivory rounded-full px-5 py-2.5 text-sm font-extrabold hover:bg-white/5 transition">
+                Validate ticket
+              </Link>
+              <Link href="/dashboard/artist/events/new">
+                <button className="bg-marigold text-marigold-dark rounded-full px-5 py-2.5 text-sm font-extrabold hover:opacity-90 transition">
+                  + Create event
+                </button>
+              </Link>
+            </div>
           </div>
 
           {loading && <p className="text-muted">Loading your events...</p>}
