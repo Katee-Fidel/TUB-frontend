@@ -6,6 +6,13 @@ import NavBar from "@/components/NavBar";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import { api } from "@/lib/api";
 
+function classifyError(message = "") {
+  const text = message.toLowerCase();
+  if (text.includes("already") || text.includes("used") || text.includes("redeemed")) return "used";
+  if (text.includes("event")) return "event";
+  return "invalid";
+}
+
 export default function TicketValidationPage() {
   const [token, setToken] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -14,7 +21,6 @@ export default function TicketValidationPage() {
   const [result, setResult] = useState(null);
   const videoRef = useRef(null);
   const streamRef = useRef(null);
-  const detectorRef = useRef(null);
   const frameRef = useRef(null);
   const validatingRef = useRef(false);
 
@@ -38,13 +44,13 @@ export default function TicketValidationPage() {
     stopCamera();
     setToken("");
     setSubmitting(true);
-    setResult(null);
+    setResult({ type: "checking", message: "Checking ticket…" });
 
     try {
       const data = await api.validateTicket(scannedToken);
-      setResult({ type: "success", message: data.message, ticket: data.ticket });
+      setResult({ type: "success", message: data.message || "Ticket valid — guest admitted.", ticket: data.ticket });
     } catch (error) {
-      setResult({ type: "error", message: error.message });
+      setResult({ type: classifyError(error.message), message: error.message || "This ticket could not be validated." });
     } finally {
       setSubmitting(false);
       validatingRef.current = false;
@@ -62,7 +68,6 @@ export default function TicketValidationPage() {
 
     try {
       const detector = new window.BarcodeDetector({ formats: ["qr_code"] });
-      detectorRef.current = detector;
       const stream = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: { ideal: "environment" }, width: { ideal: 1280 }, height: { ideal: 720 } },
         audio: false,
@@ -70,7 +75,7 @@ export default function TicketValidationPage() {
       streamRef.current = stream;
       setScanning(true);
 
-      requestAnimationFrame(async function scanFrame() {
+      const scanFrame = async () => {
         if (!videoRef.current || !streamRef.current) return;
         try {
           if (videoRef.current.readyState >= 2) {
@@ -85,10 +90,11 @@ export default function TicketValidationPage() {
           console.error("QR detection error:", error);
         }
         frameRef.current = requestAnimationFrame(scanFrame);
-      });
+      };
 
       videoRef.current.srcObject = stream;
       await videoRef.current.play();
+      frameRef.current = requestAnimationFrame(scanFrame);
     } catch (error) {
       stopCamera();
       setCameraError(error?.name === "NotAllowedError"
@@ -101,6 +107,15 @@ export default function TicketValidationPage() {
     event.preventDefault();
     await validateScannedToken(token);
   }
+
+  const resultCopy = {
+    success: { title: "VALID TICKET", action: "Guest admitted" },
+    used: { title: "ALREADY USED", action: "Do not admit guest" },
+    event: { title: "WRONG EVENT", action: "Do not admit guest" },
+    invalid: { title: "INVALID TICKET", action: "Do not admit guest" },
+    checking: { title: "CHECKING…", action: "Verifying ticket" },
+  };
+  const currentResult = result && resultCopy[result.type];
 
   return (
     <ProtectedRoute allowedRoles={["artist"]}>
@@ -117,69 +132,33 @@ export default function TicketValidationPage() {
           <section className="bg-surface border border-white/10 rounded-card p-4 sm:p-6">
             <div className="relative overflow-hidden rounded-2xl bg-black aspect-square sm:aspect-[4/3]">
               <video ref={videoRef} muted playsInline className={`w-full h-full object-cover ${scanning ? "block" : "hidden"}`} />
-              {scanning && (
-                <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
-                  <div className="w-3/4 aspect-square max-w-[280px] border-2 border-marigold rounded-2xl shadow-[0_0_0_9999px_rgba(0,0,0,0.35)]" />
-                </div>
-              )}
-              {!scanning && (
-                <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-center">
-                  <p className="text-muted text-sm">Camera scanner</p>
-                  <p className="mt-2 text-xs text-muted">Use the rear camera and hold the QR inside the frame.</p>
-                </div>
-              )}
+              {scanning && <div className="absolute inset-0 pointer-events-none flex items-center justify-center"><div className="w-3/4 aspect-square max-w-[280px] border-2 border-marigold rounded-2xl shadow-[0_0_0_9999px_rgba(0,0,0,0.35)]" /></div>}
+              {!scanning && <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-center"><p className="text-muted text-sm">Camera scanner</p><p className="mt-2 text-xs text-muted">Use the rear camera and hold the QR inside the frame.</p></div>}
             </div>
 
             <div className="flex gap-3 mt-4">
-              {!scanning ? (
-                <button type="button" onClick={startCamera} disabled={submitting} className="flex-1 bg-marigold text-marigold-dark rounded-full px-5 py-3 font-extrabold hover:opacity-90 disabled:opacity-50 transition">
-                  Scan with camera
-                </button>
-              ) : (
-                <button type="button" onClick={stopCamera} className="flex-1 border border-white/10 text-ivory rounded-full px-5 py-3 font-semibold hover:bg-white/5 transition">
-                  Stop camera
-                </button>
-              )}
+              {!scanning ? <button type="button" onClick={startCamera} disabled={submitting} className="flex-1 bg-marigold text-marigold-dark rounded-full px-5 py-3 font-extrabold hover:opacity-90 disabled:opacity-50 transition">Scan with camera</button> : <button type="button" onClick={stopCamera} className="flex-1 border border-white/10 text-ivory rounded-full px-5 py-3 font-semibold hover:bg-white/5 transition">Stop camera</button>}
             </div>
 
             {cameraError && <p className="mt-3 text-hibiscus text-sm">{cameraError}</p>}
 
-            <div className="flex items-center gap-3 my-6 text-xs text-muted uppercase tracking-[0.18em]">
-              <span className="h-px bg-white/10 flex-1" />
-              <span>or enter token</span>
-              <span className="h-px bg-white/10 flex-1" />
-            </div>
+            <div className="flex items-center gap-3 my-6 text-xs text-muted uppercase tracking-[0.18em]"><span className="h-px bg-white/10 flex-1" /><span>or enter token</span><span className="h-px bg-white/10 flex-1" /></div>
 
             <form onSubmit={handleSubmit}>
               <label className="field-label" htmlFor="ticket-token">Ticket QR token</label>
-              <textarea
-                id="ticket-token"
-                value={token}
-                onChange={(event) => setToken(event.target.value)}
-                required
-                rows={4}
-                placeholder="Paste scanner output here"
-                className="w-full rounded-lg bg-ink border border-white/10 p-3 text-sm text-ivory focus:outline-none focus:border-marigold"
-              />
-              <button
-                type="submit"
-                disabled={submitting || !token.trim()}
-                className="w-full mt-4 border border-white/10 text-ivory rounded-full px-6 py-3 font-semibold hover:bg-white/5 disabled:opacity-50 transition"
-              >
-                {submitting ? "Checking ticket..." : "Admit guest"}
-              </button>
+              <textarea id="ticket-token" value={token} onChange={(event) => setToken(event.target.value)} required rows={4} placeholder="Paste scanner output here" className="w-full rounded-lg bg-ink border border-white/10 p-3 text-sm text-ivory focus:outline-none focus:border-marigold" />
+              <button type="submit" disabled={submitting || !token.trim()} className="w-full mt-4 border border-white/10 text-ivory rounded-full px-6 py-3 font-semibold hover:bg-white/5 disabled:opacity-50 transition">{submitting ? "Checking ticket..." : "Admit guest"}</button>
             </form>
           </section>
 
-          {result && (
-            <div className={`mt-5 rounded-card border p-5 ${result.type === "success" ? "border-marigold/40 bg-marigold/10" : "border-hibiscus/40 bg-hibiscus/10"}`}>
-              <p className={result.type === "success" ? "text-marigold font-semibold" : "text-hibiscus font-semibold"}>{result.message}</p>
-              {result.ticket && (
-                <p className="text-muted text-sm mt-2">
-                  {result.ticket.user?.name || "Guest"} · {result.ticket.event?.title || "Event"} · {result.ticket.quantity} ticket(s)
-                </p>
-              )}
-            </div>
+          {result && currentResult && (
+            <section aria-live="assertive" className={`mt-5 rounded-card border p-6 text-center ${result.type === "success" ? "border-marigold/50 bg-marigold/10" : result.type === "checking" ? "border-white/10 bg-surface" : "border-hibiscus/50 bg-hibiscus/10"}`}>
+              <p className={`text-xs font-bold tracking-[0.2em] ${result.type === "success" ? "text-marigold" : result.type === "checking" ? "text-muted" : "text-hibiscus"}`}>{currentResult.action}</p>
+              <h2 className={`font-display text-3xl mt-2 ${result.type === "success" ? "text-marigold" : result.type === "checking" ? "text-ivory" : "text-hibiscus"}`}>{currentResult.title}</h2>
+              <p className="mt-3 text-sm text-ivory/90">{result.message}</p>
+              {result.ticket && <p className="text-muted text-sm mt-3">{result.ticket.user?.name || "Guest"} · {result.ticket.event?.title || "Event"} · {result.ticket.quantity} ticket(s)</p>}
+              {result.type !== "checking" && <button type="button" onClick={() => { setResult(null); setCameraError(""); }} className="mt-5 rounded-full border border-white/10 px-5 py-2.5 text-sm font-semibold hover:bg-white/5 transition">Scan next ticket</button>}
+            </section>
           )}
         </div>
       </main>
