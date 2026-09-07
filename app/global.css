@@ -1,70 +1,103 @@
-@import url('https://fonts.googleapis.com/css2?family=Anton&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=Syne:wght@700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=Protest+Revolution&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --tub-ink: #170F28;
+  --tub-surface: #241A3D;
+  --tub-surface-2: #2E2150;
+  --tub-obsidian: #0A0812;
+  --tub-ivory: #F7F3EC;
+  --tub-muted: #B7A9CE;
+  --tub-champagne: #E7C97A;
+  --tub-marigold: #F4B740;
+  --tub-copper: #B8774B;
+  --tub-hibiscus: #FF5470;
+  --tub-success: #7FD88F;
+  --tub-border: rgba(247, 243, 236, 0.10);
+  --tub-glass: rgba(36, 26, 61, 0.72);
+}
+
+html { background: var(--tub-ink); }
 body {
-  background-color: #170F28;
-  color: #F7F3EC;
+  margin: 0;
+  background:
+    radial-gradient(circle at 15% 0%, rgba(231, 201, 122, 0.07), transparent 34rem),
+    radial-gradient(circle at 90% 25%, rgba(184, 119, 75, 0.06), transparent 30rem),
+    var(--tub-ink);
+  color: var(--tub-ivory);
   font-family: 'Plus Jakarta Sans', sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Shared form field styling — used across login, register, and event forms */
-.field {
-  display: block;
-  margin-bottom: 18px;
-}
-.field-label {
-  display: block;
-  font-size: 13px;
-  font-weight: 600;
-  color: #B7A9CE;
-  margin-bottom: 6px;
-}
-.field input[type="text"],
-.field input[type="email"],
-.field input[type="password"],
-.field input[type="number"],
-.field input[type="tel"],
-.field input[type="datetime-local"],
-.field textarea {
-  width: 100%;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(247, 243, 236, 0.12);
-  border-radius: 10px;
-  padding: 11px 14px;
-  color: #F7F3EC;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 14px;
-  outline: none;
-  transition: border-color 0.15s;
-}
-.field input:focus,
-.field textarea:focus {
-  border-color: #F4B740;
-}
-.field input::placeholder,
-.field textarea::placeholder {
-  color: #000000;
+::selection { background: rgba(231, 201, 122, 0.30); color: var(--tub-ivory); }
+
+button, a, input, textarea, select { -webkit-tap-highlight-color: transparent; }
+button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible {
+  outline: 2px solid var(--tub-champagne);
+  outline-offset: 2px;
 }
 
-.auth-page { min-height: 100vh; display: grid; grid-template-columns: minmax(0, 1fr) minmax(480px, 1fr); background: #131313; color: #e5e2e1; font-family: 'Space Grotesk', sans-serif; }
-.auth-hero { min-height: 100vh; position: relative; display: flex; align-items: flex-end; padding: clamp(32px, 6vw, 80px); background-image: linear-gradient(0deg, rgba(19,19,19,.98) 0%, rgba(19,19,19,.58) 38%, rgba(19,19,19,.12) 100%), var(--auth-image); background-size: cover; background-position: center; }
+/* Shared form fields */
+.field { display: block; margin-bottom: 18px; }
+.field-label { display: block; font-size: 13px; font-weight: 600; color: var(--tub-muted); margin-bottom: 6px; }
+.field input[type="text"], .field input[type="email"], .field input[type="password"], .field input[type="number"], .field input[type="tel"], .field input[type="datetime-local"], .field textarea, .field select {
+  width: 100%; box-sizing: border-box; background: rgba(255,255,255,.045); border: 1px solid var(--tub-border); border-radius: 12px; padding: 12px 14px; color: var(--tub-ivory); font: inherit; font-size: 14px; outline: none; transition: border-color .18s, background .18s, box-shadow .18s;
+}
+.field input:focus, .field textarea:focus, .field select:focus { border-color: rgba(231,201,122,.75); background: rgba(255,255,255,.065); box-shadow: 0 0 0 3px rgba(231,201,122,.08); }
+.field input::placeholder, .field textarea::placeholder { color: rgba(183,169,206,.62); }
+
+/* App-wide design primitives. These are intentionally generic so existing product flows can adopt them incrementally. */
+.tub-glass { background: linear-gradient(145deg, rgba(46,33,80,.72), rgba(23,15,40,.70)); border: 1px solid rgba(247,243,236,.10); box-shadow: 0 18px 48px -24px rgba(0,0,0,.80); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); }
+.tub-glass-soft { background: rgba(36,26,61,.58); border: 1px solid rgba(247,243,236,.08); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+.tub-panel { border-radius: 22px; }
+.tub-card { border-radius: 14px; }
+.tub-shell { border-radius: 28px; }
+.tub-border { border-color: rgba(247,243,236,.10); }
+.tub-muted { color: var(--tub-muted); }
+.tub-eyebrow { color: var(--tub-champagne); font-family: 'Space Mono', monospace; font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+.tub-display { font-family: Anton, sans-serif; letter-spacing: .02em; text-transform: uppercase; }
+.tub-hero { font-family: 'Protest Revolution', cursive; }
+
+.tub-button-primary { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 42px; padding: 10px 18px; border: 0; border-radius: 999px; background: linear-gradient(100deg, var(--tub-marigold), var(--tub-champagne)); color: #3b2f00; font-weight: 800; transition: transform .18s, box-shadow .18s, opacity .18s; box-shadow: 0 0 24px rgba(231,201,122,.14); }
+.tub-button-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 28px rgba(231,201,122,.18); }
+.tub-button-primary:disabled { opacity: .55; transform: none; box-shadow: none; }
+.tub-button-secondary { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 42px; padding: 10px 18px; border: 1px solid rgba(231,201,122,.28); border-radius: 999px; background: rgba(255,255,255,.035); color: var(--tub-ivory); font-weight: 700; transition: background .18s, border-color .18s, transform .18s; }
+.tub-button-secondary:hover { background: rgba(231,201,122,.07); border-color: rgba(231,201,122,.58); transform: translateY(-1px); }
+.tub-button-danger { border-color: rgba(255,84,112,.32); color: var(--tub-hibiscus); }
+
+.tub-status { display: inline-flex; align-items: center; gap: 6px; width: fit-content; padding: 5px 9px; border-radius: 999px; border: 1px solid rgba(247,243,236,.10); background: rgba(255,255,255,.04); color: var(--tub-muted); font-family: 'Space Mono', monospace; font-size: 10px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+.tub-status-success { border-color: rgba(127,216,143,.28); background: rgba(127,216,143,.08); color: var(--tub-success); }
+.tub-status-warning { border-color: rgba(244,183,64,.28); background: rgba(244,183,64,.08); color: var(--tub-marigold); }
+.tub-status-danger { border-color: rgba(255,84,112,.30); background: rgba(255,84,112,.08); color: var(--tub-hibiscus); }
+
+.tub-divider { height: 1px; background: rgba(247,243,236,.08); }
+.tub-hover-lift { transition: transform .18s, border-color .18s, box-shadow .18s; }
+.tub-hover-lift:hover { transform: translateY(-2px); border-color: rgba(231,201,122,.24); box-shadow: 0 18px 48px -24px rgba(0,0,0,.90); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
+}
+
+/* Auth foundation */
+.auth-page { min-height: 100vh; display: grid; grid-template-columns: minmax(0, 1fr) minmax(480px, 1fr); background: var(--tub-obsidian); color: #e5e2e1; font-family: 'Space Grotesk', sans-serif; }
+.auth-hero { min-height: 100vh; position: relative; display: flex; align-items: flex-end; padding: clamp(32px, 6vw, 80px); background-image: linear-gradient(0deg, rgba(10,8,18,.98) 0%, rgba(10,8,18,.58) 38%, rgba(10,8,18,.12) 100%), var(--auth-image); background-size: cover; background-position: center; }
 .auth-hero-copy { position: relative; max-width: 570px; }
-.auth-hero h1 { margin: 14px 0 22px; color: #fff; font-family: Syne, sans-serif; font-size: clamp(3.5rem, 6vw, 5.7rem); line-height: .96; letter-spacing: 0; text-transform: uppercase; }
+.auth-hero h1 { margin: 14px 0 22px; color: #fff; font-family: 'Protest Revolution', cursive; font-size: clamp(3.5rem, 6vw, 5.7rem); line-height: .96; }
 .auth-hero-copy > p:last-child { max-width: 500px; color: #cfc6ae; font-size: 17px; line-height: 1.65; }
 .auth-kicker { color: #ffeebb; font-family: 'Space Mono', monospace; font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
-.auth-mark { color: #ffeebb; font-family: Syne, sans-serif; font-size: 24px; font-weight: 800; letter-spacing: .08em; text-decoration: none; }
+.auth-mark { color: #ffeebb; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 24px; font-weight: 800; letter-spacing: .08em; text-decoration: none; }
 .auth-mark-hero { position: absolute; top: clamp(28px, 5vw, 64px); left: clamp(32px, 6vw, 80px); }
-.auth-stage { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 48px clamp(24px, 6vw, 96px); background: radial-gradient(circle at 50% 40%, rgba(255,238,187,.06), transparent 62%), #131313; }
+.auth-stage { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 48px clamp(24px, 6vw, 96px); background: radial-gradient(circle at 50% 40%, rgba(231,201,122,.06), transparent 62%), var(--tub-obsidian); }
 .auth-mark-mobile { display: none; margin-bottom: 32px; }
-.auth-card { width: min(100%, 448px); padding: 32px; background: rgba(28,27,27,.84); border: 1px solid rgba(152,144,122,.28); border-radius: 12px; box-shadow: 0 18px 42px rgba(0,0,0,.45); }
-.auth-tabs { display: flex; gap: 4px; padding: 4px; margin-bottom: 36px; background: #201f1f; border: 1px solid rgba(152,144,122,.2); border-radius: 999px; }
+.auth-card { width: min(100%, 448px); padding: 32px; background: rgba(36,26,61,.82); border: 1px solid rgba(231,201,122,.18); border-radius: 22px; box-shadow: 0 18px 42px rgba(0,0,0,.45); backdrop-filter: blur(20px); }
+.auth-tabs { display: flex; gap: 4px; padding: 4px; margin-bottom: 36px; background: rgba(10,8,18,.70); border: 1px solid rgba(247,243,236,.10); border-radius: 999px; }
 .auth-tabs a { flex: 1; padding: 10px 8px; border-radius: 999px; color: #cfc6ae; font-family: 'Space Mono', monospace; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-align: center; text-decoration: none; text-transform: uppercase; }
 .auth-tabs a.active { background: #ffeebb; color: #3b2f00; box-shadow: 0 0 16px rgba(255,238,187,.24); }
 .auth-intro { margin-bottom: 28px; }
-.auth-intro h2 { margin: 8px 0 0; color: #fff; font-family: Syne, sans-serif; font-size: 28px; line-height: 1.12; }
+.auth-intro h2 { margin: 8px 0 0; color: #fff; font-family: 'Protest Revolution', cursive; font-size: 30px; line-height: 1.12; }
 .auth-form { display: grid; gap: 22px; }
 .auth-field { position: relative; display: block; border-bottom: 1px solid rgba(152,144,122,.5); }
 .auth-field:focus-within { border-color: #ffeebb; }
@@ -90,7 +123,7 @@ body {
 .auth-socials span { font-size: 13px; }
 .auth-role { display: flex; gap: 10px; border: 0; padding: 0; margin: 0; }
 .auth-role legend { margin-bottom: 8px; color: #cfc6ae; font-size: 13px; }
-.auth-role label { flex: 1; padding: 10px; border: 1px solid rgba(152,144,122,.3); border-radius: 6px; color: #cfc6ae; cursor: pointer; font-size: 13px; text-align: center; }
+.auth-role label { flex: 1; padding: 10px; border: 1px solid rgba(152,144,122,.3); border-radius: 10px; color: #cfc6ae; cursor: pointer; font-size: 13px; text-align: center; }
 .auth-role label.selected { border-color: #ffeebb; background: rgba(244,208,63,.14); color: #ffeebb; }
 .auth-role input { margin-right: 6px; }
 .auth-footnote { margin-top: 18px; color: #98907a; font-size: 11px; text-align: center; }
