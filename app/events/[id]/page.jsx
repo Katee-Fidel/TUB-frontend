@@ -24,45 +24,45 @@ export default function EventDetailPage() {
       <div className="max-w-5xl mx-auto px-8">
         <NavBar />
 
-        <div className="max-w-lg mx-auto py-10">
-          <Link href="/events" className="text-muted text-sm hover:text-ivory transition">
+        <div className="max-w-2xl mx-auto py-10">
+          <Link href="/events" className="text-muted text-xs uppercase tracking-wider hover:text-ivory transition">
             ← Back to discover
           </Link>
 
           {error && <p className="text-hibiscus mt-6">{error}</p>}
-          {!event && !error && <p className="text-muted mt-6">Loading...</p>}
+          {!event && !error && <p className="text-muted mt-6 uppercase text-xs tracking-wider">Loading event...</p>}
 
           {event && (
-            <div className="bg-surface border border-white/10 rounded-card overflow-hidden mt-4">
-              <div className="h-56 bg-gradient-to-br from-surface-2 to-surface">
+            <article className="bg-surface border border-white/10 overflow-hidden mt-4">
+              <div className="h-64 bg-gradient-to-br from-surface-2 to-surface">
                 {event.bannerUrl && (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img src={event.bannerUrl} alt={event.title} className="w-full h-full object-cover" />
                 )}
               </div>
 
-              <div className="relative border-t-2 border-dashed border-white/10 mx-4">
-                <div className="absolute rounded-full bg-ink" style={{ width: 18, height: 18, top: -10, left: -22 }} />
-                <div className="absolute rounded-full bg-ink" style={{ width: 18, height: 18, top: -10, right: -22 }} />
-              </div>
+              <div className="border-t-2 border-dashed border-white/10" />
 
-              <div className="p-8">
-                <h1 className="font-display text-3xl uppercase tracking-wide mb-2">{event.title}</h1>
-                <p className="text-muted mb-4">By {event.artist?.name}</p>
-                <p className="text-ivory mb-1">{event.venue}</p>
-                <p className="text-muted text-sm mb-6">{new Date(event.date).toLocaleString()}</p>
-                <p className="text-ivory/90 mb-6 leading-relaxed">{event.description}</p>
+              <div className="p-6 sm:p-8">
+                <p className="text-marigold text-xs font-bold uppercase tracking-[0.15em] mb-3">Event / Live</p>
+                <h1 className="font-display text-4xl sm:text-5xl uppercase leading-none mb-3">{event.title}</h1>
+                <p className="text-muted mb-6">By {event.artist?.name}</p>
 
-                <div className="flex items-center justify-between border-t border-white/10 pt-6">
-                  <div>
-                    <p className="font-mono text-xl font-bold">KES {event.ticketPrice}</p>
-                    <p className="text-muted text-xs">{event.ticketsRemaining} tickets remaining</p>
+                <div className="grid sm:grid-cols-2 gap-0 border-y border-white/10 mb-6">
+                  <div className="py-4 sm:pr-4 sm:border-r border-white/10">
+                    <p className="text-muted text-[11px] uppercase tracking-wider mb-1">Venue</p>
+                    <p className="text-ivory">{event.venue}</p>
+                  </div>
+                  <div className="py-4 sm:pl-4">
+                    <p className="text-muted text-[11px] uppercase tracking-wider mb-1">Date & time</p>
+                    <p className="text-ivory">{new Date(event.date).toLocaleString()}</p>
                   </div>
                 </div>
-                
+
+                <p className="text-ivory/90 mb-7 leading-relaxed">{event.description}</p>
                 <TicketPurchase event={event} />
               </div>
-            </div>
+            </article>
           )}
         </div>
       </div>
