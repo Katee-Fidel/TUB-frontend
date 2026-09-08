@@ -1,5 +1,4 @@
-// Ticket-stub styled event card. `actions` is optional — the artist
-// dashboard passes Edit/Delete buttons; the public discovery grid omits it.
+// Editorial event card. `actions` is optional for artist management views.
 
 export default function EventCard({ event, actions }) {
   const date = new Date(event.date);
@@ -7,42 +6,33 @@ export default function EventCard({ event, actions }) {
   const month = date.toLocaleString("en-US", { month: "short" }).toUpperCase();
 
   return (
-    <div className="flex-none w-64 bg-surface border border-white/10 rounded-card overflow-hidden">
-      <div className="relative h-36 bg-gradient-to-br from-surface-2 to-surface">
-        {event.bannerUrl && (
+    <div className="group flex h-full w-full flex-col overflow-hidden border border-white/30 bg-surface transition hover:border-white">
+      <div className="relative h-44 bg-surface-2">
+        {event.bannerUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={event.bannerUrl} alt={event.title} className="w-full h-full object-cover" />
+          <img src={event.bannerUrl} alt={event.title} className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.02]" />
+        ) : (
+          <div className="flex h-full items-end p-4 font-display text-3xl uppercase text-muted">TUB / LIVE</div>
         )}
-        <div className="absolute top-3 left-3 bg-marigold text-marigold-dark rounded-lg px-2.5 py-1.5 text-center font-mono">
-          <span className="block text-xl font-bold leading-none">{day}</span>
-          <span className="text-[10px] font-bold tracking-wide">{month}</span>
+        <div className="absolute left-0 top-0 bg-marigold px-3 py-2 text-center font-bold text-marigold-dark">
+          <span className="block text-2xl leading-none">{day}</span>
+          <span className="text-[10px] font-bold tracking-[0.12em]">{month}</span>
         </div>
         {event.status === "draft" && (
-          <span className="absolute top-3 right-3 bg-ink/80 text-muted text-[10px] font-bold uppercase tracking-wide px-2 py-1 rounded">
-            Draft
-          </span>
+          <span className="absolute right-0 top-0 bg-ink px-3 py-2 text-[10px] font-bold uppercase tracking-[0.12em] text-muted">Draft</span>
         )}
       </div>
 
-      <div className="relative border-t-2 border-dashed border-white/10 mx-3.5">
-        <div className="absolute rounded-full bg-ink" style={{ width: 18, height: 18, top: -10, left: -24 }} />
-        <div className="absolute rounded-full bg-ink" style={{ width: 18, height: 18, top: -10, right: -24 }} />
-      </div>
+      <div className="border-t border-dashed border-white/30" />
 
-      <div className="p-4 pt-4">
-        <h3 className="font-display text-lg uppercase tracking-wide mb-2 leading-tight">
-          {event.title}
-        </h3>
-        <p className="text-muted text-sm mb-3">{event.venue}</p>
-        <div className="flex items-center justify-between mb-3">
-          <p className="font-mono text-sm font-bold text-ivory">
-            KES {event.ticketPrice} <span className="text-muted font-normal text-[11px]">/ from</span>
-          </p>
-          <span className="text-muted text-xs">
-            {event.ticketsSold ?? 0}/{event.totalTickets} sold
-          </span>
+      <div className="flex flex-1 flex-col p-5">
+        <h3 className="font-display text-xl uppercase leading-tight tracking-wide text-ivory">{event.title}</h3>
+        <p className="mt-2 text-sm text-muted">{event.venue}</p>
+        <div className="mt-auto flex items-end justify-between gap-3 pt-6">
+          <p className="font-body text-sm font-bold text-ivory">KES {event.ticketPrice}<span className="ml-1 font-normal text-[11px] text-muted">/ from</span></p>
+          <span className="text-right text-xs uppercase tracking-wide text-muted">{event.ticketsSold ?? 0}/{event.totalTickets} sold</span>
         </div>
-        {actions && <div className="flex gap-2 pt-2 border-t border-white/10">{actions}</div>}
+        {actions && <div className="mt-4 flex gap-2 border-t border-white/10 pt-3">{actions}</div>}
       </div>
     </div>
   );
