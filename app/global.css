@@ -69,7 +69,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .field input::placeholder,
 .field textarea::placeholder { color: #98907a; }
 
-/* Keep auth-specific layout while applying the shared visual language. */
+/* Auth: compact labels above the input so they never collide with user text. */
 .auth-page { min-height: 100vh; display: grid; grid-template-columns: minmax(0, 1fr) minmax(420px, 1fr); background: var(--ink); color: var(--ivory); }
 .auth-hero { min-height: 100vh; position: relative; display: flex; align-items: flex-end; padding: clamp(32px, 6vw, 80px); background-image: linear-gradient(0deg, rgba(19,19,19,.98) 0%, rgba(19,19,19,.58) 38%, rgba(19,19,19,.12) 100%), var(--auth-image); background-size: cover; background-position: center; }
 .auth-hero-copy { position: relative; max-width: 570px; }
@@ -86,15 +86,14 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .auth-tabs a.active { background: var(--gold); color: #3b2f00; box-shadow: none; }
 .auth-intro { margin-bottom: 28px; }
 .auth-intro h2 { margin: 8px 0 0; color: #fff; font-family: 'Protest Revolution', sans-serif; font-size: 28px; line-height: 1.12; text-transform: uppercase; }
-.auth-form { display: grid; gap: 22px; }
-.auth-field { position: relative; display: block; border-bottom: 1px solid var(--outline); }
+.auth-form { display: grid; gap: 24px; }
+.auth-field { position: relative; display: block; padding-top: 17px; border-bottom: 1px solid var(--outline); }
 .auth-field:focus-within { border-color: var(--gold); }
-.auth-field span:first-child { position: absolute; top: 11px; left: 0; color: var(--muted); font-size: 14px; pointer-events: none; transition: transform .18s, color .18s; }
-.auth-field input { width: 100%; padding: 10px 0 9px; border: 0; outline: 0; background: transparent; color: var(--ivory); font: inherit; font-size: 15px; }
-.auth-field input::placeholder { color: transparent; }
-.auth-field:has(input:focus) > span:first-child, .auth-field:has(input:not(:placeholder-shown)) > span:first-child { transform: translateY(-19px) scale(.84); transform-origin: left; color: var(--gold-light); }
-.auth-field input:focus, .auth-field input:not(:placeholder-shown) { padding-top: 17px; padding-bottom: 2px; }
-.auth-field-password .auth-eye { position: absolute; right: 0; top: 9px; color: var(--muted); font-size: 20px; }
+.auth-field > span:first-child { display: block; position: static; margin-bottom: 2px; color: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: .05em; line-height: 14px; pointer-events: none; text-transform: uppercase; }
+.auth-field input { width: 100%; padding: 5px 0 9px; border: 0; outline: 0; background: transparent; color: var(--ivory); font: inherit; font-size: 15px; line-height: 22px; }
+.auth-field input::placeholder { color: var(--outline); opacity: 1; }
+.auth-field input:focus { padding: 5px 0 9px; }
+.auth-field-password .auth-eye { position: absolute; right: 0; top: 27px; color: var(--muted); font-size: 20px; }
 .auth-options { display: flex; justify-content: space-between; align-items: center; gap: 12px; color: var(--muted); font-size: 13px; }
 .auth-options label { display: flex; align-items: center; gap: 8px; }
 .auth-options input, .auth-role input { accent-color: var(--gold); }
@@ -102,13 +101,6 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .auth-error { margin: -4px 0 0; color: var(--error); font-size: 13px; }
 .auth-submit { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 14px 18px; border: 0; border-radius: 0; background: var(--gold); color: #3b2f00; cursor: pointer; font-family: 'Space Grotesk', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; box-shadow: none; }
 .auth-submit:disabled { opacity: .55; cursor: wait; }
-.auth-divider { display: flex; align-items: center; gap: 14px; margin: 30px 0 20px; color: var(--muted); font-size: 12px; }
-.auth-divider::before, .auth-divider::after { content: ''; height: 1px; flex: 1; background: var(--outline-variant); }
-.auth-socials { display: flex; gap: 14px; }
-.auth-socials button { display: flex; justify-content: center; align-items: center; gap: 10px; flex: 1; padding: 11px; border: 1px solid var(--outline); border-radius: 0; background: var(--ink); color: var(--ivory); cursor: pointer; font: inherit; }
-.auth-socials button:hover { border-color: var(--gold); }
-.auth-socials strong { font-size: 17px; }
-.auth-socials span { font-size: 13px; }
 .auth-role { display: flex; gap: 10px; border: 0; padding: 0; margin: 0; }
 .auth-role legend { margin-bottom: 8px; color: var(--muted); font-size: 13px; }
 .auth-role label { flex: 1; padding: 10px; border: 1px solid var(--outline); border-radius: 0; color: var(--muted); cursor: pointer; font-size: 13px; text-align: center; }
