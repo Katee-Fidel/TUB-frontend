@@ -38,12 +38,6 @@ export default function AuthShell({ mode, children, error, submitting, onSubmit 
               <span aria-hidden="true">-&gt;</span>
             </button>
           </form>
-
-          <div className="auth-divider"><span>or continue with</span></div>
-          <div className="auth-socials">
-            <button type="button" aria-label="Continue with Google"><strong>G</strong><span>Google</span></button>
-            <button type="button" aria-label="Continue with Apple"><strong></strong><span>Apple</span></button>
-          </div>
         </div>
         <p className="auth-footnote">By continuing, you agree to our <a href="#terms">terms of use</a> and <a href="#privacy">privacy policy</a>.</p>
       </section>
