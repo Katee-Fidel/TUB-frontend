@@ -11,7 +11,7 @@ export default function TicketPurchase({ event }) {
   const [quantity, setQuantity] = useState(1);
   const [method, setMethod] = useState("wallet");
   const [phone, setPhone] = useState("");
-  const [status, setStatus] = useState("idle"); // idle | submitting | polling | done | error
+  const [status, setStatus] = useState("idle");
   const [error, setError] = useState("");
   const [ticket, setTicket] = useState(null);
 
@@ -58,10 +58,10 @@ export default function TicketPurchase({ event }) {
   if (status === "done" && ticket) {
     return (
       <div className="border-t border-white/10 pt-6 text-center">
-        <p className="text-marigold font-semibold mb-3">Ticket confirmed 🎉</p>
+        <p className="text-marigold font-semibold mb-3 uppercase tracking-wider">Ticket confirmed</p>
         {ticket.qrImageUrl && (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={ticket.qrImageUrl} alt="Ticket QR code" className="mx-auto w-40 h-40 rounded-lg bg-white p-2" />
+          <img src={ticket.qrImageUrl} alt="Ticket QR code" className="mx-auto w-40 h-40 bg-white p-2" />
         )}
         <p className="text-muted text-xs mt-3">Show this at the gate. Also saved under "My tickets."</p>
       </div>
@@ -70,25 +70,25 @@ export default function TicketPurchase({ event }) {
 
   return (
     <form onSubmit={handlePurchase} className="border-t border-white/10 pt-6">
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-5">
         <div>
           <p className="font-mono text-xl font-bold">KES {event.ticketPrice}</p>
-          <p className="text-muted text-xs">{remaining} tickets remaining</p>
+          <p className="text-muted text-xs uppercase tracking-wide">{remaining} tickets remaining</p>
         </div>
-        <div className="flex items-center gap-2">
-          <button type="button" onClick={() => setQuantity((q) => Math.max(1, q - 1))} className="w-8 h-8 rounded-full border border-white/10 text-ivory">-</button>
-          <span className="w-6 text-center">{quantity}</span>
-          <button type="button" onClick={() => setQuantity((q) => Math.min(remaining, q + 1))} className="w-8 h-8 rounded-full border border-white/10 text-ivory">+</button>
+        <div className="flex items-center border border-white/10">
+          <button type="button" onClick={() => setQuantity((q) => Math.max(1, q - 1))} className="w-9 h-9 border-r border-white/10 text-ivory hover:bg-surface-2" aria-label="Decrease quantity">−</button>
+          <span className="w-9 text-center text-sm font-bold">{quantity}</span>
+          <button type="button" onClick={() => setQuantity((q) => Math.min(remaining, q + 1))} className="w-9 h-9 border-l border-white/10 text-ivory hover:bg-surface-2" aria-label="Increase quantity">+</button>
         </div>
       </div>
 
-      <div className="flex gap-2 mb-4">
-        <label className={`flex-1 text-center py-2.5 rounded-full text-sm font-semibold cursor-pointer border transition ${method === "wallet" ? "bg-marigold text-marigold-dark border-marigold" : "border-white/10 text-muted"}`}>
-          <input type="radio" name="method" value="wallet" checked={method === "wallet"} onChange={() => setMethod("wallet")} className="hidden" />
+      <div className="grid grid-cols-2 border border-white/10 mb-5">
+        <label className={`text-center py-3 text-xs font-bold uppercase tracking-wider cursor-pointer border-r border-white/10 transition ${method === "wallet" ? "bg-marigold text-marigold-dark" : "text-muted hover:bg-surface-2"}`}>
+          <input type="radio" name="method" value="wallet" checked={method === "wallet"} onChange={() => setMethod("wallet")} className="sr-only" />
           Wallet
         </label>
-        <label className={`flex-1 text-center py-2.5 rounded-full text-sm font-semibold cursor-pointer border transition ${method === "mpesa" ? "bg-marigold text-marigold-dark border-marigold" : "border-white/10 text-muted"}`}>
-          <input type="radio" name="method" value="mpesa" checked={method === "mpesa"} onChange={() => setMethod("mpesa")} className="hidden" />
+        <label className={`text-center py-3 text-xs font-bold uppercase tracking-wider cursor-pointer transition ${method === "mpesa" ? "bg-marigold text-marigold-dark" : "text-muted hover:bg-surface-2"}`}>
+          <input type="radio" name="method" value="mpesa" checked={method === "mpesa"} onChange={() => setMethod("mpesa")} className="sr-only" />
           M-Pesa
         </label>
       </div>
@@ -100,12 +100,17 @@ export default function TicketPurchase({ event }) {
         </div>
       )}
 
-      {error && <p className="text-hibiscus text-sm mb-3">{error}</p>}
+      {error && <p className="text-hibiscus text-sm mb-3" role="alert">{error}</p>}
+
+      <div className="flex items-end justify-between mb-4 border-t border-white/10 pt-4">
+        <span className="text-muted text-xs uppercase tracking-wide">Order total</span>
+        <span className="font-mono text-lg font-bold">KES {total}</span>
+      </div>
 
       <button
         type="submit"
         disabled={status === "submitting" || status === "polling" || remaining < 1}
-        className="w-full bg-marigold text-marigold-dark rounded-full px-6 py-3 font-extrabold hover:opacity-90 disabled:opacity-50 transition"
+        className="w-full bg-marigold text-marigold-dark border border-marigold px-6 py-3 font-extrabold uppercase tracking-wider hover:opacity-90 disabled:opacity-50 transition"
       >
         {status === "submitting" && "Starting..."}
         {status === "polling" && "Waiting for M-Pesa..."}
